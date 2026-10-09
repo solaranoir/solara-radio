@@ -1,86 +1,101 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from 'react';
+import { giddyUpPlaylists, spotifyPlaylistId } from '../data/giddyUpPlaylists';
 
-export default function SpotifySCMEmbedPlayer() {
-  const [playlists, setPlaylists] = useState([]);
-  const [playlistId, setPlaylistId] = useState("");
+/** Frontend-only curated Spotify playlist gallery. No OAuth, backend, or Vercel. */
+export default function SpotifySCMEmbedWidget() {
+  const playlists = useMemo(
+    () => giddyUpPlaylists
+      .map((playlist) => ({ ...playlist, id: spotifyPlaylistId(playlist.url) }))
+      .filter((playlist) => playlist.id),
+    []
+  );
+  const [series, setSeries] = useState('All');
+  const [selectedId, setSelectedId] = useState(null);
+  const seriesOptions = ['All', ...new Set(playlists.map((p) => p.series || 'Other'))];
+  const visible = playlists.filter((p) => series === 'All' || (p.series || 'Other') === series);
+  const selected = playlists.find((p) => p.id === selectedId) || visible[0];
 
-  useEffect(() => {
-    fetch("https://solara-radio.onrender.com/api/spotify-playlists")
-      .then((res) => res.json())
-      .then((data) => {
-        setPlaylists(data);
-        if (data.length) {
-          setPlaylistId(data[0].id);
-        }
-      })
-      .catch((err) => console.error("Failed to load playlists:", err));
-  }, []);
-
-  const handleChange = (e) => {
-    setPlaylistId(e.target.value);
+  const chooseSeries = (value) => {
+    setSeries(value);
+    setSelectedId(null);
   };
 
-  const embedUrl = playlistId
-    ? `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=solara`
-    : "";
-
-  const handleRandomSelect = () => {
-    if (playlists.length) {
-      const random = playlists[Math.floor(Math.random() * playlists.length)];
-      setPlaylistId(random.id);
-    }
+  const surpriseMe = () => {
+    if (!visible.length) return;
+    const alternatives = visible.filter((p) => p.id !== selected?.id);
+    const pool = alternatives.length ? alternatives : visible;
+    setSelectedId(pool[Math.floor(Math.random() * pool.length)].id);
   };
 
   return (
-    <div className="solara-widget pb-2">
-      <h2 className="widget-heading">Space Cowgirl Radio</h2>
+    <section className="solara-widget pb-2" aria-labelledby="giddy-up-heading">
+      <h2 id="giddy-up-heading" className="widget-heading">Giddy Up, It's Galactic</h2>
+      <p className="text-tan mb-4">A curated constellation of public Spotify playlists.</p>
 
-      <div className="flex flex-col gap-4 mb-4">
-        <label className="font-medium text-lg text-tan">
-          Select a Playlist:
-        </label>
-
-        <select
-          className="w-full p-2 px-3 rounded-lg border border-persian-orange shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-tan text-gunmetal whitespace-normal"
-          value={playlistId}
-          onChange={handleChange}
-          disabled={!playlists.length}
-        >
-          {playlists.map((playlist) => (
-            <option
-              key={playlist.id}
-              value={playlist.id}
-              className="whitespace-normal"
+      {playlists.length === 0 ? (
+        <p className="text-tan" role="status">
+          The playlist catalog is waiting for public Spotify playlist links.
+          Add them to src/data/giddyUpPlaylists.js.
+        </p>
+      ) : (
+        <>
+          <div className="flex flex-col gap-3 mb-4">
+            <label htmlFor="giddy-series" className="text-tan font-medium">Playlist series</label>
+            <select
+              id="giddy-series"
+              className="w-full p-2 rounded-lg bg-tan text-gunmetal"
+              value={series}
+              onChange={(event) => chooseSeries(event.target.value)}
             >
-              {playlist.name.replace(/^SCM:\s*/, "")}
-            </option>
-          ))}
-        </select>
+              {seriesOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
 
-        <button
-          type="button"
-          className="px-4 py-2 bg-sage text-gunmetal rounded-lg shadow hover:bg-emerald-600 transition"
-          onClick={handleRandomSelect}
-          disabled={!playlists.length}
-        >
-          Surprise Me, Universe
-        </button>
-      </div>
+            <label htmlFor="giddy-playlist" className="text-tan font-medium">Choose a playlist</label>
+            <select
+              id="giddy-playlist"
+              className="w-full p-2 rounded-lg bg-tan text-gunmetal"
+              value={selected?.id || ''}
+              onChange={(event) => setSelectedId(event.target.value)}
+            >
+              {visible.map((playlist) => (
+                <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
+              ))}
+            </select>
 
-      {embedUrl && (
-        <div className="rounded-xl shadow-md overflow-hidden">
-          <iframe
-            title="Spotify Playlist Embed"
-            src={embedUrl}
-            width="100%"
-            height="380"
-            frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          ></iframe>
-        </div>
+            <button
+              type="button"
+              className="px-4 py-2 bg-sage text-gunmetal rounded-lg hover:opacity-90"
+              onClick={surpriseMe}
+            >
+              Surprise Me, Universe
+            </button>
+          </div>
+
+          {selected && (
+            <div>
+              {selected.description && <p className="text-tan mb-3">{selected.description}</p>}
+              <iframe
+                key={selected.id}
+                title={`Spotify player: ${selected.name}`}
+                src={`https://open.spotify.com/embed/playlist/${selected.id}?utm_source=generator`}
+                width="100%"
+                height="352"
+                style={{ border: 0, borderRadius: 12 }}
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+              <a
+                href={`https://open.spotify.com/playlist/${selected.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-3 text-tan underline underline-offset-4"
+              >
+                Open playlist in Spotify ↗
+              </a>
+            </div>
+          )}
+        </>
       )}
-    </div>
+    </section>
   );
 }
-
