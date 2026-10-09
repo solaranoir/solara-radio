@@ -81,7 +81,7 @@
 /* Home page composition: calm, consistent two-column clusters */
 .solara-app { min-height: 100vh; background: var(--solara-midnight); color: var(--solara-text); }
 .solara-home { width: min(100% - 2rem, 1600px); margin: 0 auto; }
-.solara-home .solara-hero { margin-top: 1rem; background-image: url('/solara-hero.png'); background-position: center; }
+.solara-home .solara-hero { margin-top: 1rem; background-position: center; }
 .solara-hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.35rem; }
 .solara-eyebrow { text-transform: uppercase; letter-spacing: .17em; font-size: .7rem; color: var(--solara-sand); font-weight: 700; }
 .solara-surface { min-width: 0; padding: clamp(1rem, 2vw, 1.5rem); border: 1px solid var(--solara-border); border-radius: var(--solara-radius); background: var(--solara-gunmetal); }
