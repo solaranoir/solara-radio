@@ -37,7 +37,6 @@ export default function Home() {
            "linear-gradient(90deg, rgba(11,29,41,0.8) 0%, rgba(11,29,41,0.15) 75%), url('/solara-hero.png')"
        }}
       >
-      <section className="solara-hero" aria-labelledby="solara-hero-title">
         <div className="solara-hero__content">
           <p className="solara-eyebrow">Amateur radio · Space · Nature · Technology</p>
           <h1 className="solara-hero__title" id="solara-hero-title">Signals from a Wilder Universe</h1>
