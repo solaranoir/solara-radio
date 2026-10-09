@@ -1,40 +1,112 @@
-.App {
-  text-align: center;
+/* Solara Radio v2: reusable spatial layout primitives.
+   These classes are opt-in until App.js and Home.jsx are refactored. */
+.App { min-height: 100vh; color: var(--solara-text); }
+
+.solara-shell { width: min(100% - 2rem, 1600px); margin-inline: auto; }
+.solara-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem; padding: .85rem 0;
+  border-bottom: 1px solid var(--solara-border);
+}
+.solara-brand { font: 700 clamp(1.35rem, 2vw, 2rem)/1.1 Georgia, 'Times New Roman', serif; color: var(--solara-copper); }
+.solara-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; }
+.solara-nav a { color: var(--solara-text); text-decoration: none; font-size: .9rem; }
+.solara-nav a:hover, .solara-nav a[aria-current="page"] { color: var(--solara-sand); }
+
+/* Full-bleed banner: never share its row with a persistent side rail. */
+.solara-hero {
+  position: relative; isolation: isolate; display: flex; align-items: center;
+  min-height: clamp(300px, 31vw, 490px);
+  overflow: hidden; border-radius: var(--solara-radius);
+  background-color: var(--solara-midnight);
+  background-position: center; background-size: cover;
+}
+.solara-hero::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgba(11,29,41,.94) 0%, rgba(11,29,41,.64) 34%, transparent 70%);
+}
+.solara-hero__content { width: min(100%, 660px); padding: clamp(1.25rem, 4vw, 4rem); }
+.solara-hero__title { margin: 0 0 .75rem; font: 600 clamp(2.5rem, 5.5vw, 5.5rem)/1.02 Georgia, 'Times New Roman', serif; color: var(--solara-sand); }
+.solara-hero__subtitle { max-width: 50ch; color: var(--solara-text); line-height: 1.55; }
+
+/* Deliberate two-column instrument clusters, rather than arbitrary card spans. */
+.solara-dashboard { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(.85rem, 1.5vw, 1.4rem); margin-block: 1.25rem 2rem; align-items: start; }
+.solara-dashboard > * { min-width: 0; }
+.solara-panel--wide { grid-column: 1 / -1; }
+.solara-panel--expandable { min-height: 0; }
+.solara-panel--expandable[open] { grid-column: 1 / -1; }
+.solara-panel__header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.solara-panel__body { min-width: 0; }
+.solara-panel__body[hidden] { display: none; }
+.solara-panel__summary { cursor: pointer; color: var(--solara-sand); font-weight: 600; }
+
+.solara-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
+.solara-metric { padding: 1rem; border: 1px solid var(--solara-border); border-radius: 12px; background: rgba(11,29,41,.55); }
+.solara-metric__label { color: var(--solara-muted); font-size: .78rem; }
+.solara-metric__value { display: block; margin-top: .35rem; color: var(--solara-sand); font-size: clamp(1.5rem, 2.4vw, 2.4rem); font-weight: 650; font-variant-numeric: tabular-nums; }
+.solara-condition--good { color: var(--solara-sage); }
+.solara-condition--caution { color: var(--solara-sand); }
+.solara-condition--poor { color: #FF9284; }
+
+.solara-pota-layout { display: grid; grid-template-columns: minmax(250px, .85fr) minmax(0, 1.15fr); gap: 1rem; }
+.solara-map { min-width: 0; min-height: 320px; overflow: hidden; border-radius: 12px; background: rgba(36,102,109,.2); }
+.solara-profile-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .75fr); gap: 1rem; align-items: center; }
+.solara-qsl-card { display: block; width: 100%; height: auto; border-radius: 10px; }
+.solara-resources { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; font-size: .85rem; }
+.solara-resources a { color: var(--solara-muted); }
+.solara-resources a:hover { color: var(--solara-sand); }
+.solara-resource-drawer { border-top: 1px solid var(--solara-border); padding: 1rem 0; }
+
+.solara-button-primary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .7rem 1.15rem; border: 0; border-radius: 9px; background: var(--solara-copper); color: var(--solara-midnight); font-weight: 700; text-decoration: none; }
+.solara-button-primary:hover { background: var(--solara-sand); color: var(--solara-midnight); }
+.solara-button-secondary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .65rem 1.1rem; border: 1px solid var(--solara-sage); border-radius: 9px; background: transparent; color: var(--solara-text); text-decoration: none; }
+.solara-button-secondary:hover { background: rgba(163,182,141,.12); color: var(--solara-sand); }
+
+@media (max-width: 1000px) {
+  .solara-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .solara-pota-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .solara-shell { width: min(100% - 1rem, 1600px); }
+  .solara-dashboard { grid-template-columns: 1fr; }
+  .solara-panel--wide, .solara-panel--expandable[open] { grid-column: auto; }
+  .solara-profile-layout { grid-template-columns: 1fr; }
+  .solara-hero { min-height: 360px; background-position: 65% center; }
+  .solara-hero::before { background: linear-gradient(90deg, rgba(11,29,41,.9), rgba(11,29,41,.3)); }
+  .solara-hero__content { padding: 1.25rem; }
+  .solara-hero__title { font-size: clamp(2.3rem, 10vw, 3.5rem); }
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+/* Home page composition: calm, consistent two-column clusters */
+.solara-app { min-height: 100vh; background: var(--solara-midnight); color: var(--solara-text); }
+.solara-home { width: min(100% - 2rem, 1600px); margin: 0 auto; }
+.solara-home .solara-hero { margin-top: 1rem; background-image: url('/solara-hero.png'); background-position: center; }
+.solara-hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.35rem; }
+.solara-eyebrow { text-transform: uppercase; letter-spacing: .17em; font-size: .7rem; color: var(--solara-sand); font-weight: 700; }
+.solara-surface { min-width: 0; padding: clamp(1rem, 2vw, 1.5rem); border: 1px solid var(--solara-border); border-radius: var(--solara-radius); background: var(--solara-gunmetal); }
+.solara-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.solara-section-heading h2, .solara-atlas h2 { margin: 0; color: var(--solara-sand); font: 600 clamp(1.3rem, 2vw, 1.8rem)/1.2 Georgia, serif; }
+.solara-expand-toggle { border: 1px solid var(--solara-border); background: transparent; color: var(--solara-sand); border-radius: .5rem; padding: .4rem .65rem; cursor: pointer; white-space: nowrap; }
+.solara-expand-toggle:hover { background: rgba(242,199,157,.1); }
+.solara-full-row { grid-column: 1 / -1; min-width: 0; }
+.solara-solar-cluster { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: 1rem; }
+.solara-solar-cluster > * { min-width: 0; }
+.solara-atlas { background: linear-gradient(135deg, var(--solara-gunmetal), var(--solara-midnight)); display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+.solara-atlas p { margin: 0; line-height: 1.5; }
+.solara-atlas a { margin-top: auto; }
+.solara-muted { color: var(--solara-muted); font-size: .9rem; }
+.solara-home .solara-widget { min-height: 0; max-height: none; height: auto; }
+.solara-about .solara-widget { padding: 0; background: transparent; box-shadow: none; }
+.solara-about .solara-widget img { max-height: 270px; object-fit: contain; }
+.solara-home .sidebar-widget { margin: 0; }
+#other-utilities aside { width: 100%; max-width: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+#other-utilities .sidebar-widget { min-width: 0; }
+@media (max-width: 1050px) { .solara-solar-cluster { grid-template-columns: 1fr; } }
+@media (max-width: 720px) {
+ .solara-home { width: min(100% - 1rem, 1600px); }
+ .solara-home .solara-hero { background-position: 65% center; }
+ .solara-section-heading { align-items: flex-start; }
+ .solara-dashboard { grid-template-columns: 1fr; }
+ .solara-full-row { grid-column: auto; }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-

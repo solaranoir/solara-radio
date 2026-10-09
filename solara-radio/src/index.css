@@ -2,47 +2,109 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Solara Radio / Radio Atlas shared visual foundation */
+:root {
+  color-scheme: dark;
+  --solara-midnight: #0B1D29;
+  --solara-gunmetal: #0C2F34;
+  --solara-nebula: #24666D;
+  --solara-copper: #EC935E;
+  --solara-sand: #F2C79D;
+  --solara-sage: #A3B68D;
+  --solara-text: #F3EDE4;
+  --solara-muted: #B9C9C4;
+  --solara-border: rgba(163, 182, 141, 0.23);
+  --solara-focus: #F2C79D;
+  --solara-radius: 16px;
+  --solara-shadow: 0 16px 38px rgba(0, 8, 12, 0.24);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--solara-midnight);
+  color: var(--solara-text);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  min-width: 320px;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #0C2F34;
-  background-image: radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.05), transparent),
-                    radial-gradient(1px 1px at 70% 80%, rgba(255, 255, 255, 0.04), transparent),
-                    radial-gradient(1px 1px at 40% 60%, rgba(255, 255, 255, 0.03), transparent);
-  background-repeat: repeat;
-  background-size: 200px 200px;
+  background: radial-gradient(ellipse at 80% 0%, rgba(36,102,109,.22), transparent 50%), var(--solara-midnight);
 }
-
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root { min-height: 100vh; }
+a { color: var(--solara-sand); text-underline-offset: .2em; }
+a:hover { color: var(--solara-copper); }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--solara-focus);
+  outline-offset: 3px;
 }
+::selection { background: var(--solara-nebula); color: white; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
 
 @layer components {
+  /* Preserve existing component class names while modernizing their treatment. */
+  .solara-widget {
+    background: linear-gradient(155deg, rgba(12,47,52,.97), rgba(11,29,41,.98));
+    color: var(--solara-text);
+    border: 1px solid var(--solara-border);
+    border-radius: var(--solara-radius);
+    box-shadow: var(--solara-shadow);
+    padding: clamp(1rem, 2vw, 1.5rem);
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+  }
+  .tall-widget { min-height: 0; max-height: none; grid-row: auto; }
+  .short-widget { min-height: 0; max-height: none; }
+  .widget-heading {
+    color: var(--solara-sand);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -.015em;
+    margin: 0 0 1rem;
+  }
   .sidebar-widget {
-    @apply mb-6 pb-2 p-2 bg-sage text-gunmetal;
+    background: rgba(12,47,52,.85);
+    color: var(--solara-text);
+    border: 1px solid var(--solara-border);
+    border-radius: 12px;
+    padding: .9rem;
+    margin-bottom: .75rem;
   }
   .sidebar-heading {
-    @apply text-xl font-heading mb-3 text-gunmetal text-center;
+    color: var(--solara-sand);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.3;
+    margin: 0 0 .65rem;
+    text-align: left;
   }
   .sidebar-button {
-   @apply px-2.5 py-1.5 rounded-lg hover:bg-amber-400 transition shadow-sm text-sm bg-persian-orange text-gunmetal text-center font-semibold
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: .45rem .75rem;
+    border: 1px solid var(--solara-border);
+    border-radius: 8px;
+    background: rgba(36,102,109,.32);
+    color: var(--solara-text);
+    font-size: .85rem;
+    font-weight: 600;
+    text-align: center;
+    transition: background-color .2s ease, border-color .2s ease;
   }
-  .solara-widget {
-    @apply bg-gunmetal p-4 rounded-2xl shadow-lg min-h-[350px] sm:min-h-[380px] md:min-h-[420px] max-h-[60vh] row-span-1 overflow-auto;
-  }
-  .tall-widget {
-    @apply min-h-[700px] sm:min-h-[760px] md:min-h-[840px] max-h-[90vh] row-span-2;
-  }
-  .short-widget {
-    @apply min-h-[120px] sm:min-h-[140px] md:min-h-[160px] max-h-[20vh];
-  }
-  .widget-heading {
-    @apply text-3xl font-heading tracking-wide mb-4 text-persian-orange;
-  }
-}  
+  .sidebar-button:hover { background: var(--solara-nebula); border-color: var(--solara-sage); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
