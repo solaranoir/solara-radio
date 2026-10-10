@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-const GeolocationContext = createContext();
+const GeolocationContext = createContext(null);
 
 export function GeolocationProvider({ children }) {
   const [enabled, setEnabled] = useState(false);
@@ -8,23 +8,31 @@ export function GeolocationProvider({ children }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!enabled) return;
-
-    if (!navigator.geolocation) {
-      setError('Geolocation not supported.');
+    if (!enabled) {
+      setLocation(null);
+      setError(null);
       return;
     }
-
+    let active = true;
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by this browser.');
+      return;
+    }
+    setError(null);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setLocation({
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-        });
+        if (!active) return;
+        setLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
         setError(null);
       },
-      (err) => setError(err.message)
+      (err) => {
+        if (!active) return;
+        setLocation(null);
+        setError(err.message);
+      },
+      { timeout: 12000, maximumAge: 300000 }
     );
+    return () => { active = false; };
   }, [enabled]);
 
   return (
@@ -35,7 +43,9 @@ export function GeolocationProvider({ children }) {
 }
 
 export function useGeolocation() {
-  return useContext(GeolocationContext);
+  const context = useContext(GeolocationContext);
+  if (!context) throw new Error('useGeolocation must be used within GeolocationProvider');
+  return context;
 }
 
 export { GeolocationContext };

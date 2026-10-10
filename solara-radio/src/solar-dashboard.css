@@ -1,0 +1,22 @@
+.solara-solar-widget,.solara-prop-widget,.solara-location-settings{color:#e8e4d8;font-size:.93rem;min-width:0}
+.solara-solar-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
+.solara-solar-tabs button,.solara-prop-refresh{background:#173e43;color:#f2c79d;border:1px solid #346068;border-radius:8px;padding:.5rem .7rem;cursor:pointer}
+.solara-solar-tabs button.is-active{background:#ec935e;color:#0b1d29;border-color:#ec935e;font-weight:700}
+.solara-solar-subtitle,.solara-prop-heading h3{color:#f2c79d;font-family:Georgia,serif;font-size:1.18rem;margin:0 0 .75rem}
+.solara-solar-metrics,.solara-prop-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.6rem 0 1rem}
+.solara-solar-metrics>div,.solara-prop-metric{background:#103137;border:1px solid #2b5156;border-radius:10px;padding:.7rem .55rem;min-width:0}
+.solara-solar-metrics span,.solara-prop-metric span{display:block;color:#b7c8c3;font-size:.78rem;margin-bottom:.3rem}
+.solara-solar-metrics strong,.solara-prop-metric strong{display:block;color:#f2c79d;font-size:1.2rem;overflow-wrap:anywhere}
+.solara-solar-details p{margin:.35rem 0}
+.solara-solar-note{font-size:.8rem;line-height:1.55;color:#b7c8c3;margin:.7rem 0}
+.solara-solar-source{font-size:.77rem;color:#b7c8c3;margin:1rem 0 0}
+.solara-solar-source a{color:#f2c79d;text-decoration:underline}
+.solara-prop-heading{display:flex;align-items:start;justify-content:space-between;gap:.5rem}
+.solara-prop-refresh{font-size:.78rem;padding:.35rem .55rem}
+.solara-prop-scales{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem}
+.solara-prop-scales .solara-prop-metric strong{font-size:1rem}
+.solara-prop-location{margin-top:1rem;border-top:1px solid #2b5156;padding-top:.5rem}
+.solara-location-settings h3{color:#f2c79d;font-family:Georgia,serif;margin:0 0 .65rem}
+.solara-location-label{display:flex;align-items:center;gap:.6rem;cursor:pointer}
+.solara-location-label input{accent-color:#ec935e}
+@media(max-width:560px){.solara-solar-metrics,.solara-prop-metrics,.solara-prop-scales{grid-template-columns:repeat(2,minmax(0,1fr))}}

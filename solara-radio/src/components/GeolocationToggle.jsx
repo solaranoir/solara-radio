@@ -1,22 +1,17 @@
 import { useGeolocation } from '../context/GeolocationProvider';
+import '../styles/solar-dashboard.css';
 
 export function GeolocationToggle() {
   const { enabled, setEnabled, error } = useGeolocation();
-
   return (
-    <div className="sidebar-widget">
-      <h3 className="sidebar-heading">Location Settings</h3>
-      <label className="flex items-center space-x-2 text-coffee">
-        <input
-          type="checkbox"
-          checked={enabled}
-          className="bg-tan accent-persian-orange"
-          onChange={(e) => setEnabled(e.target.checked)}
-        />
-        <span>Enable Geolocation</span>
+    <section className="solara-location-settings" aria-labelledby="location-settings-heading">
+      <h3 id="location-settings-heading">Location settings</h3>
+      <label className="solara-location-label">
+        <input type="checkbox" checked={Boolean(enabled)} onChange={event => setEnabled(event.target.checked)} />
+        <span>Enable location-based tools</span>
       </label>
-      {error && <p className="text-xs text-red-400 mt-2">{error}</p>}
-    </div>
+      <p className="solara-solar-note">Optional. Global solar and propagation information does not require your location.</p>
+      {error && <p role="alert" className="solara-solar-note">{String(error)}</p>}
+    </section>
   );
 }
-

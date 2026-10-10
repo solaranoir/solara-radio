@@ -32,7 +32,7 @@ export default function TrailMap({ trail, park }) {
       {coordinates.length > 0 && (
         <Polyline
           positions={coordinates}
-          pathOptions={{ color: '#6B4C3B', weight: 4 }} // coffee-colored trail
+          pathOptions={{ color: '#EC935E', weight: 4 }} // coffee-colored trail
         />
       )}
     </MapContainer>

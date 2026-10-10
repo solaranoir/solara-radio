@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config/api';
 import { useState, useEffect } from 'react';
 import { FiCompass } from 'react-icons/fi';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
@@ -60,7 +61,7 @@ export default function HikingMapsWidget() {
         setUserCoords({ lat, lon });
 
         try {
-          const res = await fetch(`https://solara-radio.onrender.com/api/nearest-park?lat=${lat}&lon=${lon}`);
+          const res = await fetch(`${API_BASE_URL}/api/nearest-park?lat=${lat}&lon=${lon}`);
           const data = await res.json();
 
           if (data && data.reference && data.state && data.latitude && data.longitude) {
@@ -85,7 +86,7 @@ export default function HikingMapsWidget() {
 
     async function fetchParks() {
       try {
-        const response = await fetch(`https://solara-radio.onrender.com/api/parks?state=${selectedState}`);
+        const response = await fetch(`${API_BASE_URL}/api/parks?state=${selectedState}`);
         const data = await response.json();
         setParks(data);
 
@@ -108,15 +109,15 @@ export default function HikingMapsWidget() {
   }, [selectedPark]);
 
   return (
-    <div className="solara-widget">
+    <div className="solara-widget !min-h-0 !max-h-none !overflow-visible">
       <h2 className="widget-heading flex items-center gap-2">
-        <FiCompass size={18} className="text-coffee" />
+        <FiCompass size={18} className="text-[#A3B68D]" />
         Hiking Trails near POTA spots
       </h2>
 
       {/* 🔘 Checkbox */}
       <label className="block mb-4 text-tan text-sm flex items-center gap-2">
-        <HiOutlineLocationMarker size={18} className="text-coffee" />
+        <HiOutlineLocationMarker size={18} className="text-[#A3B68D]" />
         <input
           type="checkbox"
           checked={useCurrentLocation}
@@ -140,7 +141,7 @@ export default function HikingMapsWidget() {
       {useCurrentLocation && nearbyPark && (
         <div className="p-2 mb-4 rounded bg-tan text-gunmetal shadow-md">
           <p className="font-semibold text-sm flex items-center gap-1">
-            <AiOutlineInfoCircle size={18} className="text-coffee" />
+            <AiOutlineInfoCircle size={18} className="text-[#A3B68D]" />
             Your current POTA location is:
           </p>
           <p className="text-md font-heading text-coffee font-semibold">
@@ -199,7 +200,7 @@ export default function HikingMapsWidget() {
       {trails.length > 0 && (
         <div className="mt-4 font-sans text-coffee">
           <h3 className="text-xl font-heading mb-2 text-persian-orange flex items-center gap-2">
-            <GiHiking size={18} className="text-coffee" />
+            <GiHiking size={18} className="text-[#A3B68D]" />
             Nearby Hiking Trails
           </h3>
           <ul className="list-disc list-inside text-sm space-y-1 bg-tan text-gunmetal">
@@ -222,7 +223,7 @@ export default function HikingMapsWidget() {
         <Modal onClose={() => setSelectedTrail(null)}>
           <div className="p-4 text-tan">
             <h2 className="text-2xl font-heading mb-2 text-persian-orange flex items-center gap-2">
-              <FaMapMarkedAlt size={18} className="text-coffee" />
+              <FaMapMarkedAlt size={18} className="text-[#A3B68D]" />
               {selectedTrail.tags?.name || 'Trail Visualization'}
             </h2>
             <TrailMap trail={selectedTrail} park={selectedPark} />
