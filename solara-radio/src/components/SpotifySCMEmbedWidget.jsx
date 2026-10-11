@@ -1,101 +1,64 @@
 import { useMemo, useState } from 'react';
-import { giddyUpPlaylists, spotifyPlaylistId } from '../data/giddyUpPlaylists';
+import { giddyUpPlaylists } from '../data/giddyUpPlaylists';
+import './SpotifySCMEmbedWidget.css';
 
-/** Frontend-only curated Spotify playlist gallery. No OAuth, backend, or Vercel. */
+const allPlaylists = giddyUpPlaylists.flatMap(group => group.playlists.map(playlist => ({ ...playlist, category: group.category })));
+
 export default function SpotifySCMEmbedWidget() {
-  const playlists = useMemo(
-    () => giddyUpPlaylists
-      .map((playlist) => ({ ...playlist, id: spotifyPlaylistId(playlist.url) }))
-      .filter((playlist) => playlist.id),
-    []
-  );
-  const [series, setSeries] = useState('All');
-  const [selectedId, setSelectedId] = useState(null);
-  const seriesOptions = ['All', ...new Set(playlists.map((p) => p.series || 'Other'))];
-  const visible = playlists.filter((p) => series === 'All' || (p.series || 'Other') === series);
-  const selected = playlists.find((p) => p.id === selectedId) || visible[0];
+  const [category, setCategory] = useState(giddyUpPlaylists[0].category);
+  const [playlistId, setPlaylistId] = useState(giddyUpPlaylists[0].playlists[0].id);
+  const group = useMemo(() => giddyUpPlaylists.find(item => item.category === category), [category]);
+  const selected = group?.playlists.find(item => item.id === playlistId) ?? group?.playlists[0];
 
-  const chooseSeries = (value) => {
-    setSeries(value);
-    setSelectedId(null);
-  };
+  function changeCategory(nextCategory) {
+    const nextGroup = giddyUpPlaylists.find(item => item.category === nextCategory);
+    if (!nextGroup) return;
+    setCategory(nextCategory);
+    setPlaylistId(nextGroup.playlists[0].id);
+  }
 
-  const surpriseMe = () => {
-    if (!visible.length) return;
-    const alternatives = visible.filter((p) => p.id !== selected?.id);
-    const pool = alternatives.length ? alternatives : visible;
-    setSelectedId(pool[Math.floor(Math.random() * pool.length)].id);
-  };
+  function surprise() {
+    if (allPlaylists.length < 2) return;
+    const choices = allPlaylists.filter(item => item.id !== selected?.id);
+    const next = choices[Math.floor(Math.random() * choices.length)];
+    setCategory(next.category);
+    setPlaylistId(next.id);
+  }
 
+  if (!selected) return <p>No playlists available.</p>;
   return (
-    <section className="solara-widget pb-2" aria-labelledby="giddy-up-heading">
-      <h2 id="giddy-up-heading" className="widget-heading">Giddy Up, It's Galactic</h2>
-      <p className="text-tan mb-4">A curated constellation of public Spotify playlists.</p>
-
-      {playlists.length === 0 ? (
-        <p className="text-tan" role="status">
-          The playlist catalog is waiting for public Spotify playlist links.
-          Add them to src/data/giddyUpPlaylists.js.
-        </p>
-      ) : (
-        <>
-          <div className="flex flex-col gap-3 mb-4">
-            <label htmlFor="giddy-series" className="text-tan font-medium">Playlist series</label>
-            <select
-              id="giddy-series"
-              className="w-full p-2 rounded-lg bg-tan text-gunmetal"
-              value={series}
-              onChange={(event) => chooseSeries(event.target.value)}
-            >
-              {seriesOptions.map((option) => <option key={option} value={option}>{option}</option>)}
-            </select>
-
-            <label htmlFor="giddy-playlist" className="text-tan font-medium">Choose a playlist</label>
-            <select
-              id="giddy-playlist"
-              className="w-full p-2 rounded-lg bg-tan text-gunmetal"
-              value={selected?.id || ''}
-              onChange={(event) => setSelectedId(event.target.value)}
-            >
-              {visible.map((playlist) => (
-                <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
-              ))}
-            </select>
-
-            <button
-              type="button"
-              className="px-4 py-2 bg-sage text-gunmetal rounded-lg hover:opacity-90"
-              onClick={surpriseMe}
-            >
-              Surprise Me, Universe
-            </button>
-          </div>
-
-          {selected && (
-            <div>
-              {selected.description && <p className="text-tan mb-3">{selected.description}</p>}
-              <iframe
-                key={selected.id}
-                title={`Spotify player: ${selected.name}`}
-                src={`https://open.spotify.com/embed/playlist/${selected.id}?utm_source=generator`}
-                width="100%"
-                height="352"
-                style={{ border: 0, borderRadius: 12 }}
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-              />
-              <a
-                href={`https://open.spotify.com/playlist/${selected.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-3 text-tan underline underline-offset-4"
-              >
-                Open playlist in Spotify ↗
-              </a>
-            </div>
-          )}
-        </>
-      )}
+    <section className="giddy-player" aria-label="Giddy Up Galaxy playlist player">
+      <header className="giddy-player__header">
+        <div>
+          <h3>Giddy Up, It's Galactic</h3>
+          <p>A curated constellation of public Spotify playlists.</p>
+        </div>
+        <span className="giddy-player__count">{allPlaylists.length} playlists · {giddyUpPlaylists.length} series</span>
+      </header>
+      <div className="giddy-player__controls">
+        <label htmlFor="giddy-series">Playlist series</label>
+        <select id="giddy-series" value={category} onChange={event => changeCategory(event.target.value)}>
+          {giddyUpPlaylists.map(group => <option key={group.category} value={group.category}>{group.category} ({group.playlists.length})</option>)}
+        </select>
+        <label htmlFor="giddy-playlist">Choose a playlist</label>
+        <select id="giddy-playlist" value={selected.id} onChange={event => setPlaylistId(event.target.value)}>
+          {group.playlists.map(playlist => <option key={playlist.id} value={playlist.id}>{playlist.title}</option>)}
+        </select>
+        <button type="button" onClick={surprise}>Surprise Me, Universe ✦</button>
+      </div>
+      <div className="giddy-player__selection" aria-live="polite"><span>{category}</span><strong>{selected.title}</strong></div>
+      <iframe
+        key={selected.id}
+        title={`Spotify playlist: ${selected.title}`}
+        src={`https://open.spotify.com/embed/playlist/${selected.id}?utm_source=generator`}
+        width="100%"
+        height="380"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        style={{ border: 0, borderRadius: 12 }}
+      />
+      <a className="giddy-player__spotify-link" href={selected.url} target="_blank" rel="noopener noreferrer">Open playlist in Spotify ↗</a>
+      <p className="giddy-player__fineprint">Playback options and track availability depend on Spotify and the listener's account.</p>
     </section>
   );
 }
