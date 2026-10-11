@@ -10,10 +10,10 @@ import PotaHikingPlantsTabs from '../components/PotaHikingPlantsTabs';
 import SatellitePassWidget from '../components/SatellitePassWidget';
 import MorseCodePracticeWidget from '../components/MorseCodePracticeWidget';
 
-function ExpandablePanel({ title, children, initiallyOpen = true, id }) {
+function ExpandablePanel({ title, children, initiallyOpen = true, id, className = "" }) {
   const [open, setOpen] = useState(initiallyOpen);
   return (
-    <section className="solara-surface solara-expandable" id={id}>
+    <section className={`solara-surface solara-expandable ${className}`.trim()} id={id}>
       <div className="solara-section-heading">
         <h2>{title}</h2>
         <button type="button" className="solara-expand-toggle" aria-expanded={open}
@@ -48,15 +48,15 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="solara-dashboard" id="solara-tools">
-        <ExpandablePanel id="solar-conditions" title="Solar Conditions · Quick Pulse">
+      <div className="solara-dashboard solara-dashboard--command" id="solara-tools">
+        <ExpandablePanel id="solar-conditions" className="solara-area-solar" title="Solar Conditions">
           <div className="solara-solar-cluster">
             <SolarPositionsWidget />
             <LivePropagationWidget />
           </div>
         </ExpandablePanel>
 
-        <section className="solara-surface solara-atlas" aria-labelledby="atlas-heading">
+        <section className="solara-surface solara-atlas solara-area-atlas" aria-labelledby="atlas-heading">
           <p className="solara-eyebrow">Explore the science behind the signal</p>
           <h2 id="atlas-heading">Solara Radio Atlas</h2>
           <p>Explore propagation, ionospheric data, and signal analysis in the companion research project.</p>
@@ -64,38 +64,38 @@ export default function Home() {
           <a className="solara-button-primary" href="https://github.com/minedamnesia" target="_blank" rel="noopener noreferrer">Explore my projects ↗</a>
         </section>
 
-        <div className="solara-full-row">
+        <div className="solara-area-pota">
           <ExpandablePanel id="pota-finder" title="POTA · Parks and Field Exploration">
             <PotaHikingPlantsTabs />
           </ExpandablePanel>
         </div>
 
-        <ExpandablePanel id="satellite-passes" title="Satellite Pass Predictor" initiallyOpen={false}>
+        <ExpandablePanel id="satellite-passes" className="solara-area-satellite" title="Satellite Pass Predictor" initiallyOpen={false}>
           <SatellitePassWidget />
         </ExpandablePanel>
-        <ExpandablePanel id="morse-practice" title="Morse Code Practice" initiallyOpen={false}>
+        <ExpandablePanel id="morse-practice" className="solara-area-morse" title="Morse Code Practice" initiallyOpen={false}>
           <MorseCodePracticeWidget />
         </ExpandablePanel>
 
-        <section className="solara-surface" id="playlists" aria-label="Giddy Up Galaxy playlists">
+        <section className="solara-surface solara-area-playlists" id="playlists" aria-label="Giddy Up Galaxy playlists">
           <div className="solara-section-heading"><h2>Giddy Up Galaxy</h2></div>
           <SpotifySCMEmbedWidget />
         </section>
-        <section className="solara-surface solara-about" id="about-me" aria-label="About me and QSL card">
+        <section className="solara-surface solara-about solara-area-about" id="about-me" aria-label="About me and QSL card">
           <Widget title="About Me" description="Software developer and Extra class amateur radio operator." image="/qsl.png" />
         </section>
 
-        <div className="solara-full-row">
+        <div className="solara-area-projects">
           <ExpandablePanel id="projects" title="Featured Coding Projects">
             <CodingProjectsWidget />
           </ExpandablePanel>
         </div>
-        <div className="solara-full-row">
+        <div className="solara-area-resources">
           <ExpandablePanel id="resources" title="Amateur Radio Resources" initiallyOpen={false}>
             <HamRadioResourcesWidget />
           </ExpandablePanel>
         </div>
-        <div className="solara-full-row">
+        <div className="solara-area-utilities">
           <ExpandablePanel id="other-utilities" title="Additional Radio Utilities" initiallyOpen={false}>
             <p className="solara-muted">Grid locator, UTC conversion, MUF maps, reception reports, and more.</p>
             <Sidebar />

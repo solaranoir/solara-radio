@@ -110,3 +110,47 @@
  .solara-dashboard { grid-template-columns: 1fr; }
  .solara-full-row { grid-column: auto; }
 }
+
+
+/* Phase 3C: dashboard composition. Keep component-specific styling intact. */
+.solara-home { width: min(100% - 2rem, 1700px); }
+.solara-home .solara-hero { min-height: clamp(260px, 26vw, 380px); margin-top: .6rem; }
+.solara-home .solara-hero__content { width: min(55%, 720px); padding: clamp(1.1rem, 3vw, 3rem); }
+.solara-home .solara-hero__title { font-size: clamp(2.3rem, 4.4vw, 4.9rem); max-width: 14ch; }
+.solara-dashboard--command {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(.65rem, 1vw, 1rem); align-items: start; margin-top: .75rem;
+}
+.solara-dashboard--command > * { min-width: 0; grid-column: auto; }
+.solara-area-solar { grid-column: 1 / span 6 !important; }
+.solara-area-atlas { grid-column: 7 / -1 !important; }
+.solara-area-pota { grid-column: 1 / -1 !important; }
+.solara-area-playlists { grid-column: 1 / span 6 !important; }
+.solara-area-satellite { grid-column: 7 / span 3 !important; }
+.solara-area-morse { grid-column: 10 / -1 !important; }
+.solara-area-about { grid-column: 1 / span 5 !important; }
+.solara-area-projects { grid-column: 6 / -1 !important; }
+.solara-area-resources, .solara-area-utilities { grid-column: 1 / -1 !important; }
+.solara-dashboard--command .solara-surface { padding: clamp(.85rem, 1.35vw, 1.25rem); }
+.solara-dashboard--command .solara-section-heading { margin-bottom: .65rem; }
+.solara-dashboard--command .solara-section-heading h2 { font-size: clamp(1.1rem, 1.6vw, 1.5rem); }
+.solara-dashboard--command .solara-solar-cluster { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: .7rem; }
+.solara-dashboard--command .solara-expand-toggle { font-size: .8rem; }
+.solara-dashboard--command .solara-atlas { gap: .65rem; }
+.solara-dashboard--command .solara-area-playlists iframe { max-width: 100%; }
+.solara-dashboard--command .solara-area-pota .solara-surface { box-shadow: none; }
+.solara-dashboard--command .solara-area-satellite,
+.solara-dashboard--command .solara-area-morse { min-height: 110px; }
+.solara-dashboard--command .solara-area-projects > section { height: 100%; }
+@media (max-width: 1200px) {
+ .solara-area-solar, .solara-area-atlas, .solara-area-playlists, .solara-area-about, .solara-area-projects { grid-column: span 6 !important; }
+ .solara-area-satellite, .solara-area-morse { grid-column: span 6 !important; }
+ .solara-dashboard--command .solara-solar-cluster { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+ .solara-dashboard--command { grid-template-columns: minmax(0, 1fr); }
+ .solara-dashboard--command > * { grid-column: 1 / -1 !important; }
+ .solara-home .solara-hero { min-height: 340px; background-position: 62% center; }
+ .solara-home .solara-hero__content { width: min(100%, 530px); }
+ .solara-home .solara-hero__title { font-size: clamp(2.1rem, 9vw, 3.5rem); }
+}
