@@ -154,3 +154,40 @@
  .solara-home .solara-hero__content { width: min(100%, 530px); }
  .solara-home .solara-hero__title { font-size: clamp(2.1rem, 9vw, 3.5rem); }
 }
+
+/* POTA field console: scoped to avoid changing the other dashboard panels */
+.pota-console { color: #F2C79D; background: #0C2F34; border: 1px solid #24666D; border-radius: 14px; padding: clamp(.8rem, 1.4vw, 1.25rem); }
+.pota-console-header { display:flex; justify-content:space-between; gap:1rem; align-items:start; margin-bottom: .8rem; }
+.pota-console-header h3 { color:#F2C79D; font: 600 clamp(1.2rem,2vw,1.65rem) Georgia,serif; margin:.1rem 0 .3rem; }
+.pota-console-header p { margin:0; color:#D3DFD9; font-size:.85rem; }
+.pota-console-header .pota-kicker { color:#A3B68D; text-transform:uppercase; letter-spacing:.13em; font-size:.65rem; }
+.pota-link { display:inline-flex; align-items:center; gap:.4rem; color:#F2C79D; background:transparent; border:0; text-decoration:underline; cursor:pointer; font-size:.8rem; white-space:nowrap; }
+.pota-view-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px; padding:3px; background:#09262D; border-radius:9px; margin-bottom:.85rem; }
+.pota-view-tabs button { color:#F2C79D; background:#174248; border:0; padding:.7rem .5rem; border-radius:6px; cursor:pointer; font-weight:600; }
+.pota-view-tabs button.active { color:#0B1D29; background:#EC935E; }
+.pota-view-tabs button:focus-visible, .pota-console button:focus-visible, .pota-console input:focus-visible, .pota-console select:focus-visible { outline:2px solid #F2C79D; outline-offset:2px; }
+.pota-console-grid { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:.85rem; }
+.pota-console-controls, .pota-map-column { min-width:0; }
+.pota-console-controls { display:flex; flex-direction:column; gap:.55rem; }
+.pota-console-controls label { font-size:.8rem; color:#F2C79D; }
+.pota-console-controls select, .pota-search { background:#0B1D29; border:1px solid #24666D; border-radius:8px; color:#F2C79D; padding:.7rem; width:100%; }
+.pota-search { display:flex; align-items:center; gap:.6rem; }
+.pota-search input { border:0; outline:0; min-width:0; flex:1; background:transparent; color:#F2C79D; }
+.pota-search input::placeholder { color:#A3B68D; }
+.pota-primary { display:flex; justify-content:center; align-items:center; gap:.5rem; background:#EC935E; color:#0B1D29; border:0; border-radius:8px; padding:.75rem; font-weight:700; cursor:pointer; }
+.pota-row { display:flex; justify-content:space-between; align-items:center; }
+.pota-status { color:#A3B68D; font-size:.76rem; margin:.15rem 0; }
+.pota-alert { background:#493127; border:1px solid #EC935E; border-radius:7px; padding:.6rem; color:#FFE1C6; font-size:.8rem; }
+.pota-alert a { color:#F2C79D; text-decoration:underline; }
+.pota-result-list { display:flex; flex-direction:column; gap:3px; max-height:320px; overflow:auto; }
+.pota-result { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:.2rem .5rem; background:#10363B; border:1px solid #24666D66; border-radius:6px; padding:.55rem .7rem; text-align:left; color:#F2C79D; cursor:pointer; font-size:.8rem; }
+.pota-result:hover { border-color:#EC935E; background:#19454B; }
+.pota-result span, .pota-result small { color:#B7C9BE; }
+.pota-map-frame { border:1px solid #24666D; border-radius:10px; overflow:hidden; background:#0B1D29; }
+.pota-leaflet-map { height:350px; width:100%; z-index:0; }
+.pota-map-legend { display:flex; gap:1rem; flex-wrap:wrap; padding:.5rem .7rem; background:#0B1D29; color:#A3B68D; font-size:.72rem; }
+.pota-map-legend span:last-child { color:#EC935E; }
+.pota-selected { display:flex; flex-wrap:wrap; gap:.35rem .8rem; align-items:center; padding:.7rem .3rem; color:#B7C9BE; font-size:.8rem; }
+.pota-selected strong { color:#F2C79D; }
+.pota-selected a { color:#EC935E; text-decoration:underline; }
+@media(max-width:800px) { .pota-console-grid { grid-template-columns:1fr; } .pota-console-header { flex-wrap:wrap; } .pota-leaflet-map { height:300px; } }
