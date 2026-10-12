@@ -40,8 +40,8 @@ export default function MaidenheadWidget() {
     e.preventDefault();
     const lat = parseFloat(latlon.lat);
     const lon = parseFloat(latlon.lon);
-    if (isNaN(lat) || isNaN(lon)) {
-      setManualError('Please enter valid numbers.');
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180 || !latlon.lat.trim() || !latlon.lon.trim()) {
+      setManualError('Enter latitude from -90 to 90 and longitude from -180 to 180.');
       return;
     }
     setManualError('');

@@ -1,0 +1,24 @@
+/* Scoped dark-theme contrast for the Tools desk and About preview. */
+.solara-tools-page .solara-utility-sidebar{width:100%;max-width:none;padding:0;color:#e5ece7;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));align-items:stretch}
+.solara-tools-page .solara-utility-sidebar__item{min-width:0}
+.solara-tools-page .sidebar-widget,.solara-tools-page .widget-container{box-sizing:border-box;width:100%;height:100%;min-width:0;margin:0;padding:1rem;background:#10383d;border:1px solid #35676b;border-radius:12px;color:#e5ece7;box-shadow:none}
+.solara-tools-page .sidebar-widget .sidebar-widget{padding:0;border:0;background:transparent}
+.solara-tools-page .sidebar-heading,.solara-tools-page .widget-container h2{color:#f2c79d;font-size:1.12rem;margin:0 0 .8rem;line-height:1.4}
+.solara-tools-page .sidebar-widget p,.solara-tools-page .sidebar-widget label,.solara-tools-page .sidebar-widget .text-coffee,.solara-tools-page .sidebar-widget .text-gunmetal,.solara-tools-page .sidebar-widget .text-tan,.solara-tools-page .widget-container .text-coffee,.solara-tools-page .widget-container .text-gunmetal{color:#e5ece7!important;line-height:1.5}
+.solara-tools-page .sidebar-widget input,.solara-tools-page .sidebar-widget select{display:block;box-sizing:border-box;max-width:100%;width:100%;min-width:0;background:#0b242e!important;color:#f7f1e8!important;border:1px solid #719b9c!important;border-radius:7px;padding:.65rem .75rem}
+.solara-tools-page .sidebar-widget input::placeholder{color:#b2c3be!important;opacity:1}
+.solara-tools-page .sidebar-widget button{cursor:pointer;min-height:38px}
+.solara-tools-page .sidebar-widget .sidebar-button{background:#ec935e!important;color:#0b1d29!important;border:1px solid #ec935e;border-radius:8px;padding:.6rem .85rem;font-weight:700}
+.solara-tools-page .sidebar-widget .sidebar-button:hover{background:#f2c79d!important}
+.solara-tools-page .sidebar-widget .bg-tan{background:#f2c79d!important;color:#0b1d29!important}
+.solara-tools-page .sidebar-widget .bg-tan *, .solara-tools-page .sidebar-widget .bg-tan .text-coffee,.solara-tools-page .sidebar-widget .bg-tan .text-gunmetal{color:#0b1d29!important}
+.solara-tools-page .sidebar-widget button.bg-persian-orange{background:#ec935e!important;color:#0b1d29!important}
+.solara-tools-page .sidebar-widget button.bg-tan{background:#244b50!important;color:#f2c79d!important}
+.solara-clock__times{display:grid;gap:.7rem}.solara-clock__times>div{padding:.7rem;border-radius:8px;background:#0b242e;border:1px solid #35676b}.solara-clock__times span{display:block;color:#b9cbc5;font-size:.8rem;margin-bottom:.2rem}.solara-clock__times strong{display:block;color:#f2c79d;font-size:1rem;overflow-wrap:anywhere}.solara-tool-note{font-size:.82rem;color:#b9cbc5!important;margin-top:.7rem}
+.solara-about-widget .solara-widget__image{display:block;width:100%;max-height:340px;object-fit:contain;border-radius:10px;border:1px solid #35676b;margin:0 auto 1rem}
+.solara-about-widget .widget-heading,.solara-about-widget .widget-heading a{color:#f2c79d!important}
+.solara-about-widget__preview{background:#143b3e;border:1px solid #35676b;padding:1rem;border-radius:10px;color:#e5ece7}
+.solara-about-widget__preview p{margin:0 0 .9rem;line-height:1.6;color:#e5ece7}
+.solara-about-widget__cta{display:inline-block;padding:.6rem .9rem;background:#ec935e;color:#0b1d29!important;font-weight:700;border-radius:8px;text-decoration:none}
+.solara-about-widget__cta:hover{background:#f2c79d}
+@media(max-width:650px){.solara-tools-page .solara-utility-sidebar{grid-template-columns:1fr}}

@@ -6,20 +6,20 @@ import MUFMapWidget from '../components/MUFMapWidget';
 
 export default function Sidebar() {
   return (
-    <aside className="w-full md:w-64 p-4 text-coffee">
-      <div className="sidebar-widget">
+    <aside className="solara-utility-sidebar">
+      <div className="solara-utility-sidebar__item">
         <TimeAndDateWidget />
       </div>
-      <div className="sidebar-widget">
+      <div className="solara-utility-sidebar__item">
         <MaidenheadWidget />
       </div>
-      <div className="sidebar-widget">
+      <div className="solara-utility-sidebar__item">
         <MUFMapWidget />
       </div>
-      <div className="sidebar-widget">
+      <div className="solara-utility-sidebar__item">
         <PskreporterWidget />
       </div>
-      <div className="sidebar-widget">
+      <div className="solara-utility-sidebar__item">
         <BuyMeCoffeeWidget />
       </div>
     </aside>
