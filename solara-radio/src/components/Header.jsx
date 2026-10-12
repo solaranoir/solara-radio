@@ -8,7 +8,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 const links = [
   ['Home', '/'], ['Solar', '/#solar-conditions'], ['POTA', '/#pota-finder'],
   ['Playlists', '/#playlists'], ['Satellites', '/#satellite-passes'],
-  ['Tools', '/tools'], ['Resume', '/resume'], ['Projects', '/#projects'], ['About', '/#about-me'],
+  ['Tools', '/tools'], ['Resume', '/resume'], ['Projects', '/#projects'], ['About', '/about'],
 ];
 export default function Header() {
   const [open, setOpen] = useState(false);

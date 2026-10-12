@@ -82,7 +82,7 @@ export default function POTAWidget() {
     <div className="pota-console">
       <div className="pota-console-header"><div><p className="pota-kicker">Parks on the Air · Field operations</p><h3>POTA Spot Finder</h3><p>Discover live activations, explore parks, and prepare for the next field day.</p></div><a href="https://pota.app/#/spots" target="_blank" rel="noopener noreferrer" className="pota-link">Official POTA spots <ExternalLink size={14}/></a></div>
       <div className="pota-view-tabs" role="tablist" aria-label="POTA tools">
-        {[['spots','Live Spots'], ['parks','Find a Park'], ['trip','Plan a Trip']].map(([key, label]) => <button key={key} type="button" role="tab" aria-selected={view === key} className={view === key ? 'active' : ''} onClick={() => setView(key)}>{label}</button>)}
+        {[['spots','Live Spots'], ['parks','Find a Park']].map(([key, label]) => <button key={key} type="button" role="tab" aria-selected={view === key} className={view === key ? 'active' : ''} onClick={() => setView(key)}>{label}</button>)}
       </div>
       <div className="pota-console-grid">
         <div className="pota-console-controls">
@@ -99,7 +99,6 @@ export default function POTAWidget() {
             {loadingParks && <p role="status" className="pota-status">Loading parks…</p>}{parkError && <p role="alert" className="pota-alert">{parkError}</p>}
             {state && !loadingParks && <p className="pota-status">{parks.length} parks returned · first 60 matches shown</p>}
             <div className="pota-result-list">{matches.map(p => <button type="button" key={getRef(p)} onClick={() => setSelected(p)} className="pota-result"><strong>{p.name}</strong><span>{getRef(p)}</span></button>)}</div>
-            {view === 'trip' && <p className="pota-status">Select a park, then use Nearby trails and Local plants in the field tools above for further exploration.</p>}
           </>}
         </div>
         <div className="pota-map-column"><POTAMap parks={mapParks} spots={mapSpots} selected={selected} onSelect={setSelected}/>

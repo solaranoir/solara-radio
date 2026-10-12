@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import Page from './pages/Page';
 import Resume from './pages/Resume';
+import About from './pages/About';
 import Tools from './pages/Tools';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/tools" element={<Tools />} />
         <Route path="/resume" element={<Resume />} />
+        <Route path="/about" element={<About />} />
         <Route path="/page" element={<Page />} />
       </Routes>
     </div>
