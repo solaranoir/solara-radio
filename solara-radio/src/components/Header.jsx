@@ -21,9 +21,9 @@ export default function Header() {
         {links.map(([label, href]) => href.startsWith('/#') ? <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a> : <Link key={label} to={href} onClick={() => setOpen(false)}>{label}</Link>)}
       </nav>
       <div className="solara-header-actions">
-        <a href="https://github.com/minedamnesia" target="_blank" rel="noopener noreferrer" className="solara-atlas-link">Radio Atlas ↗</a>
+        <a href="https://github.com/solaranoir/radio-atlas" target="_blank" rel="noopener noreferrer" className="solara-atlas-link">Radio Atlas ↗</a>
         <a href="https://www.qrz.com/db/KK7QEA" target="_blank" rel="noopener noreferrer" aria-label="QRZ KK7QEA"><ExternalLink size={18}/></a>
-        <a href="https://github.com/minedamnesia" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub size={17}/></a>
+        <a href="https://github.com/solaranoir" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub size={17}/></a>
         <a href="https://www.linkedin.com/in/kelly-simer" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><FaLinkedin size={17}/></a>
       </div>
     </div>
