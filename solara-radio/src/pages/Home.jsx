@@ -79,10 +79,10 @@ export default function Home() {
           <div className="solara-section-heading"><h2>Giddy Up Galaxy</h2></div>
           <SpotifySCMEmbedWidget />
         </section>
-        <ExpandablePanel id="satellite-passes" className="solara-area-satellite" title="Satellite Pass Predictor" initiallyOpen={false}>
+        <ExpandablePanel id="satellite-passes" className="solara-area-satellite" title="Satellite Pass Predictor" initiallyOpen={true}>
           <SatellitePassWidget />
         </ExpandablePanel>
-        <ExpandablePanel id="morse-practice" className="solara-area-morse" title="Morse Code Practice" initiallyOpen={false}>
+        <ExpandablePanel id="morse-practice" className="solara-area-morse" title="Morse Code Practice" initiallyOpen={true}>
           <MorseCodePracticeWidget />
         </ExpandablePanel>
 
@@ -93,7 +93,7 @@ export default function Home() {
         </section>
 
         <div className="solara-area-projects">
-          <ExpandablePanel id="coding-projects" title="Featured Coding Projects">
+          <ExpandablePanel id="projects" title="Featured Coding Projects">
             <CodingProjectsWidget />
           </ExpandablePanel>
         </div>

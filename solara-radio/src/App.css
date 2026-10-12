@@ -280,3 +280,19 @@
 .solara-atlas__code-link { display:inline-flex; padding:.65rem .3rem; color:#f2c79d; text-decoration:underline; text-underline-offset:3px; font-weight:600; }
 .solara-atlas__code-link:hover { color:#ec935e; }
 @media(max-width:600px){.solara-atlas__actions{align-items:stretch;flex-direction:column}.solara-atlas__code-link{padding:.5rem 0}.solara-atlas__preview-label{font-size:.7rem}}
+
+/* Equal-height dashboard surfaces within each visual row. */
+.solara-dashboard--command { align-items: stretch; }
+.solara-dashboard--command > .solara-area-solar,
+.solara-dashboard--command > .solara-area-atlas,
+.solara-dashboard--command > .solara-area-about,
+.solara-dashboard--command > .solara-area-projects { height: 100%; min-height: 0; }
+.solara-dashboard--command > .solara-area-projects > .solara-expandable { height: 100%; }
+.solara-dashboard--command > .solara-entertainment-row { align-items: stretch; }
+.solara-entertainment-row > .solara-surface { height: 100%; min-height: 0; }
+/* Keep cards aligned even if their contents differ in length. */
+.solara-entertainment-row > .solara-area-playlists { align-self: stretch; }
+@media (max-width: 760px) {
+  .solara-dashboard--command > .solara-entertainment-row { align-items: start; }
+  .solara-entertainment-row > .solara-surface { height: auto; }
+}
