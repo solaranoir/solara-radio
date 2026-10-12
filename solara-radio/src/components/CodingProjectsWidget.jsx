@@ -26,38 +26,19 @@ export default function CodingProjectsWidget() {
     },
   ];
 
-  return (
-    <div className="solara-widget col-span-3">
-      <h2 className="text-3xl font-heading tracking-wide mb-4 text-persian-orange">
-        Coding Projects
-        <span className="text-tan italic text-xl"> Coming Soon...</span>
-      </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {projects.map((project, index) => (
-          <div
-            key={index}
-            className="bg-sage p-4 rounded-xl shadow-md border border-persian-orange"
-          >
-            <h5 className="text-l font-heading mb-2 text-gunmetal">{project.name}</h5>
-            <p className="font-sans text-gunmetal text-sm mb-2">{project.description}</p>
-
-            {project.link ? (
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-coffee hover:underline text-sm font-bold"
-              >
-                View on GitHub →
-              </a>
-            ) : (
-              <span className="text-sm text-coffee italic">GitHub link coming soon…</span>
-            )}
-          </div>
-        ))}
+  return <div className="solara-projects-grid">
+    {projects.map((project, index) => <article key={project.name} className={`solara-project-card solara-project-card--${index + 1}`}>
+      <div className="solara-project-card__art" aria-hidden="true">{['◎','〰','✧','♫'][index]}</div>
+      <div className="solara-project-card__body"><h3>{project.name}</h3>
+        <p>{[
+          'Predicting signal strength, path loss and arrival angles.',
+          'Detection and classification of RF signals and modulation.',
+          'Ionospheric data and propagation research dashboard.',
+          'React-powered Spotify playlist browsing and playback.'
+        ][index]}</p>
+        <details><summary>Project details</summary><p>{project.description}</p></details>
+        {project.link && <a href={project.link} target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>}
       </div>
-    </div>
-  );
+    </article>)}
+  </div>;
 }
-

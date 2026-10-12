@@ -7,7 +7,7 @@ export default function Widget({ title, description, customClass, nestedWidget, 
   const isAboutMe = title === 'About Me';
 
   return (
-    <div className={`solara-widget pb-1`}>
+    <div className={`solara-widget pb-1 ${isAboutMe ? "solara-about-widget" : ""}`}>
       {image && (
       <img
          src={image}

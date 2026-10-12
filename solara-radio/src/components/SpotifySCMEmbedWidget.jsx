@@ -5,6 +5,7 @@ import './SpotifySCMEmbedWidget.css';
 const allPlaylists = giddyUpPlaylists.flatMap(group => group.playlists.map(playlist => ({ ...playlist, category: group.category })));
 
 export default function SpotifySCMEmbedWidget() {
+  const [showPlayer, setShowPlayer] = useState(false);
   const [category, setCategory] = useState(giddyUpPlaylists[0].category);
   const [playlistId, setPlaylistId] = useState(giddyUpPlaylists[0].playlists[0].id);
   const group = useMemo(() => giddyUpPlaylists.find(item => item.category === category), [category]);
@@ -35,7 +36,16 @@ export default function SpotifySCMEmbedWidget() {
         </div>
         <span className="giddy-player__count">{allPlaylists.length} playlists · {giddyUpPlaylists.length} series</span>
       </header>
-      <div className="giddy-player__controls">
+      <div className="giddy-featured" aria-label="Browse featured playlist series">
+        {giddyUpPlaylists.slice(0, 4).map((series, index) => (
+          <button type="button" className={`giddy-featured__card giddy-featured__card--${index + 1}`} key={series.category} onClick={() => { changeCategory(series.category); setShowPlayer(true); }}>
+            <span className="giddy-featured__art" aria-hidden="true">{['✦','◉','⌁','☾'][index]}</span>
+            <strong>{series.category}</strong><small>{series.playlists.length} playlists · Browse & play ↗</small>
+          </button>
+        ))}
+      </div>
+      <button type="button" className="giddy-player__browse" aria-expanded={showPlayer} onClick={() => setShowPlayer(!showPlayer)}>{showPlayer ? 'Hide playlist player −' : 'Browse all playlists + Play ↗'}</button>
+      {showPlayer && <div className="giddy-player__expanded"><div className="giddy-player__controls">
         <label htmlFor="giddy-series">Playlist series</label>
         <select id="giddy-series" value={category} onChange={event => changeCategory(event.target.value)}>
           {giddyUpPlaylists.map(group => <option key={group.category} value={group.category}>{group.category} ({group.playlists.length})</option>)}
@@ -58,7 +68,7 @@ export default function SpotifySCMEmbedWidget() {
         style={{ border: 0, borderRadius: 12 }}
       />
       <a className="giddy-player__spotify-link" href={selected.url} target="_blank" rel="noopener noreferrer">Open playlist in Spotify ↗</a>
-      <p className="giddy-player__fineprint">Playback options and track availability depend on Spotify and the listener's account.</p>
+      <p className="giddy-player__fineprint">Playback options and track availability depend on Spotify and the listener's account.</p></div>}
     </section>
   );
 }

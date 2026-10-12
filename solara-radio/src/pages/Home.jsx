@@ -3,9 +3,7 @@ import Widget from '../components/Widget';
 import CodingProjectsWidget from '../components/CodingProjectsWidget';
 import SolarPositionsWidget from '../components/SolarPositionsWidget';
 import SpotifySCMEmbedWidget from '../components/SpotifySCMEmbedWidget';
-import Sidebar from '../components/Sidebar';
 import LivePropagationWidget from '../components/LivePropagationWidget';
-import HamRadioResourcesWidget from '../components/HamRadioResourcesWidget';
 import PotaHikingPlantsTabs from '../components/PotaHikingPlantsTabs';
 import SatellitePassWidget from '../components/SatellitePassWidget';
 import MorseCodePracticeWidget from '../components/MorseCodePracticeWidget';
@@ -93,17 +91,10 @@ export default function Home() {
             <CodingProjectsWidget />
           </ExpandablePanel>
         </div>
-        <div className="solara-area-resources">
-          <ExpandablePanel id="resources" title="Amateur Radio Resources" initiallyOpen={false}>
-            <HamRadioResourcesWidget />
-          </ExpandablePanel>
-        </div>
-        <div className="solara-area-utilities">
-          <ExpandablePanel id="other-utilities" title="Additional Radio Utilities" initiallyOpen={false}>
-            <p className="solara-muted">Grid locator, UTC conversion, MUF maps, reception reports, and more.</p>
-            <Sidebar />
-          </ExpandablePanel>
-        </div>
+        <section className="solara-tools-cta solara-surface">
+          <div><p className="solara-eyebrow">Field station</p><h2>Looking for more radio tools?</h2><p>Grid locator, UTC clock, MUF maps, reception reports, and radio resources now have their own workspace.</p></div>
+          <a className="solara-button-primary" href="/tools">Open the Tools Desk ↗</a>
+        </section>
       </div>
     </main>
   );
