@@ -9,7 +9,7 @@ const csv = require('csv-parser');
 require('dotenv').config();
 
 const app = express();
-const PORT = 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -262,6 +262,54 @@ app.get('/api/parks', (req, res) => {
     });
 });
 
+// ===== Live POTA spots proxy =====
+// Configure POTA_SPOTS_URL with a verified upstream JSON feed URL.
+// Do not expose upstream credentials or assume an undocumented API path.
+const SPOTS_CACHE_MS = 60 * 1000;
+let spotsCache = { expires: 0, items: [] };
+
+app.get('/api/pota/spots', async (req, res) => {
+  const upstream = process.env.POTA_SPOTS_URL;
+  if (!upstream) {
+    return res.status(503).json({ error: 'Live POTA spot feed is not configured.' });
+  }
+
+  try {
+    const parsed = new URL(upstream);
+    if (parsed.protocol !== 'https:') {
+      return res.status(503).json({ error: 'POTA spot feed must use HTTPS.' });
+    }
+    if (Date.now() < spotsCache.expires) {
+      return res.json({ spots: spotsCache.items });
+    }
+
+    const response = await axios.get(parsed.toString(), {
+      timeout: 10000,
+      headers: { Accept: 'application/json' },
+      maxContentLength: 5 * 1024 * 1024,
+    });
+    const payload = response.data;
+    const records = Array.isArray(payload) ? payload : payload?.spots;
+    if (!Array.isArray(records)) throw new Error('Unexpected spot feed response shape');
+
+    const spots = records.slice(0, 2000).map((item) => ({
+      callsign: item.callsign ?? item.activator ?? item.activatorCallsign ?? null,
+      reference: item.reference ?? item.parkReference ?? item.park ?? null,
+      parkName: item.parkName ?? item.name ?? null,
+      frequency: item.frequency ?? null,
+      mode: item.mode ?? null,
+      spotTime: item.spotTime ?? item.time ?? item.timestamp ?? item.createdAt ?? null,
+      latitude: item.latitude ?? null,
+      longitude: item.longitude ?? null,
+    }));
+    spotsCache = { items: spots, expires: Date.now() + SPOTS_CACHE_MS };
+    return res.json({ spots });
+  } catch (error) {
+    console.error('POTA spots proxy error:', error.message);
+    return res.status(502).json({ error: 'Live POTA spots are temporarily unavailable.' });
+  }
+});
+
 // ===== Nearest Park from all_parks_ext.csv =====
 function haversineDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // Earth's radius in km
@@ -302,6 +350,9 @@ function loadParksFromCSV() {
 app.get('/api/nearest-park', async (req, res) => {
   const { lat, lon } = req.query;
   if (!lat || !lon) return res.status(400).json({ error: 'Missing lat/lon' });
+  if (!Number.isFinite(Number(lat)) || !Number.isFinite(Number(lon)) || Number(lat) < -90 || Number(lat) > 90 || Number(lon) < -180 || Number(lon) > 180) {
+    return res.status(400).json({ error: 'Invalid latitude or longitude' });
+  }
 
   try {
     const userLat = parseFloat(lat);
