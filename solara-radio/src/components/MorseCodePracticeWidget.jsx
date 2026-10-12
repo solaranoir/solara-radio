@@ -1,212 +1,82 @@
-import { useState } from "react";
-import { FiActivity } from "react-icons/fi";
+import { useEffect, useRef, useState } from 'react';
 
-const MORSE_CODE = {
-  A: ".-", B: "-...", C: "-.-.", D: "-..", E: ".", F: "..-.",
-  G: "--.", H: "....", I: "..", J: ".---", K: "-.-", L: ".-..",
-  M: "--", N: "-.", O: "---", P: ".--.", Q: "--.-", R: ".-.",
-  S: "...", T: "-", U: "..-", V: "...-", W: ".--", X: "-..-",
-  Y: "-.--", Z: "--..", 1: ".----", 2: "..---", 3: "...--",
-  4: "....-", 5: ".....", 6: "-....", 7: "--...", 8: "---..",
-  9: "----.", 0: "-----", " ": "/"
-};
-
-function beep(context, time, duration) {
-  const osc = context.createOscillator();
-  const gain = context.createGain();
-  osc.type = "sine";
-  osc.frequency.value = 600;
-  osc.connect(gain);
-  gain.connect(context.destination);
-  osc.start(time);
-  osc.stop(time + duration / 1000);
-}
-
-function playMorseCode(morse, wpm) {
-  const unit = 1200 / wpm;
-  const context = new (window.AudioContext || window.webkitAudioContext)();
-  let time = context.currentTime;
-
-  for (const symbol of morse) {
-    if (symbol === ".") {
-      beep(context, time, unit);
-      time += unit / 1000 + 0.05;
-    } else if (symbol === "-") {
-      beep(context, time, unit * 3);
-      time += (unit * 3) / 1000 + 0.05;
-    } else if (symbol === " ") {
-      time += (unit * 3) / 1000;
-    } else if (symbol === "/") {
-      time += (unit * 7) / 1000;
-    }
-  }
+const MORSE = { A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..',0:'-----',1:'.----',2:'..---',3:'...--',4:'....-',5:'.....',6:'-....',7:'--...',8:'---..',9:'----.' };
+const GROUPS = { letters:'ABCDEFGHIJKLMNOPQRSTUVWXYZ', numbers:'0123456789', mixed:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', callsigns:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' };
+const normalize = s => s.toUpperCase().replace(/[^A-Z0-9 ]/g,'').replace(/\s+/g,' ').trim();
+const encode = s => normalize(s).split(' ').map(word => [...word].map(c=>MORSE[c]).join(' ')).join(' / ');
+const randomFrom = pool => pool[Math.floor(Math.random()*pool.length)];
+function makePrompt(group, length) {
+  if (group === 'callsigns') return `${randomFrom('AKNW')}${randomFrom('0123456789')}${Array.from({length: Math.max(2,Math.min(4,length))},()=>randomFrom('ABCDEFGHIJKLMNOPQRSTUVWXYZ')).join('')}`;
+  return Array.from({length},()=>randomFrom(GROUPS[group])).join('');
 }
 
 export default function MorseCodePracticeWidget() {
-  const [text, setText] = useState("");
-  const [morse, setMorse] = useState("");
-  const [wpm, setWpm] = useState(20);
-  const [wordLength, setWordLength] = useState(1);
-  const [practice, setPractice] = useState("");
-  const [revealed, setRevealed] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleInput = (e) => {
-    const value = e.target.value.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
-    setText(value);
-    const morseText = value
-      .split("")
-      .map((char) => MORSE_CODE[char] || "")
-      .join(" ");
-    setMorse(morseText);
-  };
-
-  const generatePractice = async () => {
-    setError("");
-    setRevealed(false);
-    let word = "";
-
-    if (wordLength === 1) {
-      const letters = Object.keys(MORSE_CODE).filter(c => c.length === 1 && c !== " ");
-      word = letters[Math.floor(Math.random() * letters.length)];
-    } else {
-      const pattern = "?".repeat(wordLength);
-      setLoading(true);
-      try {
-        const res = await fetch(`https://api.datamuse.com/words?sp=${pattern}&max=15`);
-        const data = await res.json();
-        const candidates = data
-          .map(item => item.word.toUpperCase())
-          .filter(w => /^[A-Z]+$/.test(w));
-        if (candidates.length) {
-          word = candidates[Math.floor(Math.random() * candidates.length)];
-        } else {
-          setError("No matching words found.");
-          setLoading(false);
-          return;
-        }
-      } catch (err) {
-        console.error("API error:", err);
-        setError("Failed to fetch word from API.");
-        setLoading(false);
-        return;
-      }
-      setLoading(false);
-    }
-
-    setPractice(word);
-    const morseText = word
-      .split("")
-      .map((char) => MORSE_CODE[char] || "")
-      .join(" ");
-    setMorse(morseText);
-  };
-
-  return (
-    <div className="sidebar-widget text-center">
-      <h3 className="sidebar-heading flex flex-col items-center gap-1 text-lg font-bold">
-        <FiActivity className="text-2xl text-coffee" />
-        Morse Code Practice
-      </h3>
-      <div className="mb-4">
-        <label className="block text-sm font-semibold mb-1">Convert Text</label>
-        <input
-          type="text"
-          value={text}
-          onChange={handleInput}
-          placeholder="Type letters or numbers"
-          className="w-full p-2 border-persian-orange rounded bg-tan placeholder-coffee"
-        />
-      </div>
-
-      <div className="font-mono text-sm bg-gunmetal text-tan p-2 rounded min-h-[2rem]">
-        {morse}
-      </div>
-
-      <div className="my-3 flex flex-col gap-2">
-        <label className="text-sm font-semibold">
-          Speed: {wpm} WPM
-        </label>
-       <input
-        type="range"
-        min={5}
-        max={40}
-        value={wpm}
-        onChange={(e) => setWpm(Number(e.target.value))}
-        className="w-full accent-coffee"
-       />
-      </div>
-
-      <button
-        onClick={() => playMorseCode(morse, wpm)}
-        className="w-full sidebar-button"
-      >
-        Play Morse
-      </button>
-
-      <hr className="my-4" />
-      <div className="mb-2">
-        <label className="block text-sm font-semibold mb-1">
-          Practice: Choose Your Word Length
-        </label>
-        <input
-          type="number"
-          min={1}
-          value={wordLength}
-          onChange={(e) => setWordLength(Number(e.target.value))}
-          className="w-full p-2 border-persian-orange rounded bg-tan"
-        />
-      </div>
-
-      {loading ? (
-        <div className="text-sm text-persian-orange italic mb-2">Fetching word...</div>
-      ) : (
-        <div className="font-mono text-sm bg-tan p-2 rounded min-h-[2rem]">
-          {practice ? practice.split("").map(() => "•").join("") : "— — —"}
-        </div>
-      )}
-
-      {error && (
-        <div className="text-persian-orange text-sm mt-1 mb-2">{error}</div>
-     )}
-
-      <div className="flex gap-2 mt-2">
-        <button
-          onClick={generatePractice}
-          disabled={loading}
-          className="flex-1 sidebar-button "
-        >
-          Generate
-        </button> 
-      </div>
-
-      {practice && !loading && (
-        <>
-          <button
-            onClick={() => playMorseCode(morse, wpm)}
-            className="w-full sidebar-button"
-          >
-            Play
-          </button>
-          <div className="text-sm text-gunmetal mt-2">
-            Press the button below to reveal the word.
-          </div>
-          <button
-            onClick={() => setRevealed(true)}
-            disabled={!practice}
-            className="w-full sidebar-button"
-          >
-            Reveal
-          </button>
-        </>
-      )}
-
-      {revealed && practice && (
-        <div className="mt-3 text-center text-lg font-bold text-gunmetal">
-          {practice}
-        </div>
-      )}
-    </div>  
-  );
+  const [text,setText] = useState('CQ CQ DE KK7QEA');
+  const [wpm,setWpm] = useState(20);
+  const [effective,setEffective] = useState(15);
+  const [tone,setTone] = useState(600);
+  const [group,setGroup] = useState('mixed');
+  const [length,setLength] = useState(5);
+  const [prompt,setPrompt] = useState('');
+  const [answer,setAnswer] = useState('');
+  const [revealed,setRevealed] = useState(false);
+  const [score,setScore] = useState({correct:0,total:0});
+  const [playing,setPlaying] = useState(false);
+  const [error,setError] = useState('');
+  const audioRef = useRef(null);
+  const timerRef = useRef(null);
+  const generationRef = useRef(0);
+  const stop = () => { generationRef.current += 1; if (timerRef.current) clearTimeout(timerRef.current); timerRef.current = null; if (audioRef.current) { try { audioRef.current.close(); } catch(e) {} audioRef.current = null; } setPlaying(false); };
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); if (audioRef.current) audioRef.current.close().catch(()=>{}); }, []);
+  async function play(message) {
+    if (!normalize(message)) { setError('Enter text or generate a practice group first.'); return; }
+    stop(); setError('');
+    const Audio = window.AudioContext || window.webkitAudioContext;
+    if (!Audio) { setError('Audio playback is unavailable in this browser.'); return; }
+    try {
+      const context = new Audio(); audioRef.current = context; await context.resume();
+      const unit = 1.2 / wpm;
+      // Farnsworth: keep character elements at character WPM, stretch inter-character/word gaps.
+      const slow = 1.2 / Math.min(effective,wpm);
+      const gap = Math.max(3*unit, (50*slow - 31*unit)/19*3);
+      const wordGap = gap * 7/3;
+      let cursor = context.currentTime + .05;
+      const words = normalize(message).split(' ');
+      words.forEach((word,wi) => {
+        [...word].forEach((char,ci) => {
+          [...MORSE[char]].forEach((symbol,si) => {
+            const duration = symbol === '.' ? unit : 3*unit;
+            const osc = context.createOscillator(); const gain = context.createGain();
+            osc.type = 'sine'; osc.frequency.value = tone;
+            gain.gain.setValueAtTime(0,cursor); gain.gain.linearRampToValueAtTime(.18,cursor+.005);
+            gain.gain.setValueAtTime(.18,Math.max(cursor+.005,cursor+duration-.005)); gain.gain.linearRampToValueAtTime(0,cursor+duration);
+            osc.connect(gain); gain.connect(context.destination); osc.start(cursor); osc.stop(cursor+duration+.01);
+            cursor += duration + (si < MORSE[char].length-1 ? unit : 0);
+          });
+          if (ci < word.length-1) cursor += gap;
+        });
+        if (wi < words.length-1) cursor += wordGap;
+      });
+      setPlaying(true);
+      const generation = generationRef.current;
+      timerRef.current = setTimeout(() => { if (generation === generationRef.current) stop(); }, Math.max(0,(cursor-context.currentTime+.15)*1000));
+    } catch (err) { stop(); setError('Audio playback failed. Check your browser audio settings.'); }
+  }
+  function newPrompt() { stop(); setPrompt(makePrompt(group,length)); setAnswer(''); setRevealed(false); setError(''); }
+  function check() { if (!prompt) return; setRevealed(true); setScore(s=>({correct:s.correct+(normalize(answer)===prompt?1:0),total:s.total+1})); }
+  return <div className="solara-instrument">
+    <div className="solara-instrument__intro"><span className="solara-instrument__eyebrow">CW training desk</span><p>Practice copying by ear or convert your own message. Audio is generated locally in your browser.</p></div>
+    <div className="solara-instrument__fields"><label>Character speed <strong>{wpm} WPM</strong><input type="range" min="5" max="40" value={wpm} onChange={e=>{const n=Number(e.target.value);setWpm(n);setEffective(v=>Math.min(v,n));}} /></label><label>Effective speed <strong>{effective} WPM</strong><input type="range" min="5" max={wpm} value={effective} onChange={e=>setEffective(Number(e.target.value))}/></label></div>
+    <label>Tone <strong>{tone} Hz</strong><input type="range" min="400" max="900" step="25" value={tone} onChange={e=>setTone(Number(e.target.value))}/></label>
+    <div className="solara-instrument__divider" />
+    <h3>Text to Morse</h3><label>Message<input value={text} maxLength={140} onChange={e=>setText(e.target.value.toUpperCase().replace(/[^A-Z0-9 ]/g,''))} placeholder="CQ CQ DE KK7QEA"/></label>
+    <div className="solara-instrument__code" aria-label="Morse encoding">{encode(text) || 'Enter a message above'}</div>
+    <div className="solara-instrument__actions"><button type="button" onClick={()=>play(text)}>▶ Play message</button><button type="button" onClick={stop} disabled={!playing}>■ Stop</button></div>
+    <div className="solara-instrument__divider" />
+    <h3>Copy practice</h3><div className="solara-instrument__fields"><label>Character set<select value={group} onChange={e=>setGroup(e.target.value)}><option value="letters">Letters</option><option value="numbers">Numbers</option><option value="mixed">Letters + numbers</option><option value="callsigns">Callsign-style groups</option></select></label><label>Group length<input type="number" min="1" max="12" value={length} onChange={e=>setLength(Math.max(1,Math.min(12,Number(e.target.value)||1)))}/></label></div>
+    <div className="solara-instrument__actions"><button type="button" onClick={newPrompt}>New group</button><button type="button" disabled={!prompt} onClick={()=>play(prompt)}>▶ Listen</button><button type="button" disabled={!playing} onClick={stop}>■ Stop</button></div>
+    {prompt && <><label>What did you copy?<input value={answer} onChange={e=>setAnswer(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,''))} placeholder="Type what you heard" autoComplete="off" /></label><div className="solara-instrument__actions"><button type="button" disabled={revealed || !answer} onClick={check}>Check answer</button><button type="button" onClick={()=>setRevealed(true)}>Reveal</button></div>{revealed && <p role="status" className="solara-instrument__feedback">Answer: <strong>{prompt}</strong>{answer && <span> · {normalize(answer)===prompt?'Correct ✓':'Try another group'}</span>}</p>}</>}
+    <p className="solara-instrument__hint">Score: {score.correct}/{score.total} checked · Callsign groups are synthetic training examples, not live callsigns.</p>
+    {error && <p className="solara-instrument__error" role="alert">{error}</p>}
+  </div>;
 }

@@ -192,29 +192,31 @@
 .pota-selected a { color:#EC935E; text-decoration:underline; }
 @media(max-width:800px) { .pota-console-grid { grid-template-columns:1fr; } .pota-console-header { flex-wrap:wrap; } .pota-leaflet-map { height:300px; } }
 
-/* Phase 3D: keep playlists and compact radio tools in the SAME grid row.
-   This wrapper prevents CSS Grid auto-placement from reserving a blank half-row. */
-.solara-dashboard--command > .solara-entertainment-row {
-  grid-column: 1 / -1 !important;
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(.65rem, 1vw, 1rem);
-  align-items: start;
-  min-width: 0;
-}
-.solara-entertainment-row > * { min-width: 0; grid-column: auto !important; }
-.solara-entertainment-row > .solara-area-playlists { grid-column: 1 !important; grid-row: 1; }
-.solara-entertainment-row > .solara-area-satellite { grid-column: 2 !important; grid-row: 1; }
-.solara-entertainment-row > .solara-area-morse { grid-column: 3 !important; grid-row: 1; }
-@media (max-width: 1200px) {
-  .solara-dashboard--command > .solara-entertainment-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .solara-entertainment-row > .solara-area-playlists { grid-column: 1 / -1 !important; grid-row: 1; }
-  .solara-entertainment-row > .solara-area-satellite { grid-column: 1 !important; grid-row: 2; }
-  .solara-entertainment-row > .solara-area-morse { grid-column: 2 !important; grid-row: 2; }
-}
-@media (max-width: 760px) {
-  .solara-dashboard--command > .solara-entertainment-row { grid-template-columns: minmax(0, 1fr); }
-  .solara-entertainment-row > .solara-area-playlists { grid-column: 1 !important; grid-row: 1; }
-  .solara-entertainment-row > .solara-area-satellite { grid-column: 1 !important; grid-row: 2; }
-  .solara-entertainment-row > .solara-area-morse { grid-column: 1 !important; grid-row: 3; }
-}
+/* Phase 3E: satellite + Morse instruments */
+.solara-instrument { display:flex; flex-direction:column; gap:.8rem; min-width:0; color:#F2C79D; font-size:.9rem; }
+.solara-instrument__intro p { color:#B7C9BE; margin:.25rem 0 0; line-height:1.5; }
+.solara-instrument__eyebrow { color:#A3B68D; text-transform:uppercase; letter-spacing:.15em; font-size:.7rem; font-weight:700; }
+.solara-instrument label { display:flex; flex-direction:column; gap:.3rem; min-width:0; color:#D8E0D6; }
+.solara-instrument label strong { color:#F2C79D; }
+.solara-instrument input:not([type=range]), .solara-instrument select { width:100%; min-width:0; padding:.65rem; border:1px solid #24666D; border-radius:8px; background:#0B1D29; color:#F2C79D; }
+.solara-instrument input[type=range] { width:100%; accent-color:#EC935E; }
+.solara-instrument__fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; }
+.solara-instrument__switch, .solara-instrument__actions { display:flex; flex-wrap:wrap; gap:.5rem; }
+.solara-instrument button { padding:.6rem .8rem; border:1px solid #24666D; border-radius:8px; background:#174248; color:#F2C79D; cursor:pointer; }
+.solara-instrument button:hover, .solara-instrument button.active { background:#EC935E; color:#0B1D29; }
+.solara-instrument button:disabled { opacity:.5; cursor:not-allowed; }
+.solara-instrument button:focus-visible, .solara-instrument input:focus-visible, .solara-instrument select:focus-visible { outline:2px solid #EC935E; outline-offset:2px; }
+.solara-instrument__toolbar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem; font-size:.78rem; color:#A3B68D; }
+.solara-instrument__next { background:#10363B; border:1px solid #24666D; padding:1rem; border-radius:10px; display:flex; flex-direction:column; gap:.25rem; }
+.solara-instrument__next strong { color:#EC935E; font-size:1.3rem; }
+.solara-instrument__next small, .solara-instrument__hint { color:#A3B68D; font-size:.77rem; line-height:1.45; }
+.solara-instrument__pass-list { max-height:280px; overflow:auto; display:flex; flex-direction:column; gap:.4rem; }
+.solara-instrument__pass { background:#10363B; border:1px solid #24666D; border-radius:8px; padding:.7rem; display:flex; flex-direction:column; gap:.2rem; }
+.solara-instrument__pass span, .solara-instrument__pass small { color:#B7C9BE; }
+.solara-instrument__error { border:1px solid #EC935E; padding:.6rem; border-radius:8px; color:#FFD3B7; }
+.solara-instrument__empty { padding:1.5rem; border:1px dashed #24666D; border-radius:10px; text-align:center; color:#A3B68D; }
+.solara-instrument__code { background:#0B1D29; color:#EC935E; font:1rem/1.8 monospace; overflow-wrap:anywhere; border-radius:8px; padding:.8rem; }
+.solara-instrument__divider { border-top:1px solid #24666D; margin:.25rem 0; }
+.solara-instrument h3 { font:600 1.15rem Georgia,serif; margin:0; color:#F2C79D; }
+.solara-instrument__feedback { background:#10363B; padding:.7rem; border-radius:8px; }
+@media(max-width:600px) { .solara-instrument__fields { grid-template-columns:1fr; } }
