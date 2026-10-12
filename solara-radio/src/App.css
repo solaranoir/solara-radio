@@ -191,3 +191,30 @@
 .pota-selected strong { color:#F2C79D; }
 .pota-selected a { color:#EC935E; text-decoration:underline; }
 @media(max-width:800px) { .pota-console-grid { grid-template-columns:1fr; } .pota-console-header { flex-wrap:wrap; } .pota-leaflet-map { height:300px; } }
+
+/* Phase 3D: keep playlists and compact radio tools in the SAME grid row.
+   This wrapper prevents CSS Grid auto-placement from reserving a blank half-row. */
+.solara-dashboard--command > .solara-entertainment-row {
+  grid-column: 1 / -1 !important;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(.65rem, 1vw, 1rem);
+  align-items: start;
+  min-width: 0;
+}
+.solara-entertainment-row > * { min-width: 0; grid-column: auto !important; }
+.solara-entertainment-row > .solara-area-playlists { grid-column: 1 !important; grid-row: 1; }
+.solara-entertainment-row > .solara-area-satellite { grid-column: 2 !important; grid-row: 1; }
+.solara-entertainment-row > .solara-area-morse { grid-column: 3 !important; grid-row: 1; }
+@media (max-width: 1200px) {
+  .solara-dashboard--command > .solara-entertainment-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .solara-entertainment-row > .solara-area-playlists { grid-column: 1 / -1 !important; grid-row: 1; }
+  .solara-entertainment-row > .solara-area-satellite { grid-column: 1 !important; grid-row: 2; }
+  .solara-entertainment-row > .solara-area-morse { grid-column: 2 !important; grid-row: 2; }
+}
+@media (max-width: 760px) {
+  .solara-dashboard--command > .solara-entertainment-row { grid-template-columns: minmax(0, 1fr); }
+  .solara-entertainment-row > .solara-area-playlists { grid-column: 1 !important; grid-row: 1; }
+  .solara-entertainment-row > .solara-area-satellite { grid-column: 1 !important; grid-row: 2; }
+  .solara-entertainment-row > .solara-area-morse { grid-column: 1 !important; grid-row: 3; }
+}

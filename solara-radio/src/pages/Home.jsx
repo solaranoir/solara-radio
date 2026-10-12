@@ -70,6 +70,11 @@ export default function Home() {
           </ExpandablePanel>
         </div>
 
+        <div className="solara-entertainment-row">
+        <section className="solara-surface solara-area-playlists" id="playlists" aria-label="Giddy Up Galaxy playlists">
+          <div className="solara-section-heading"><h2>Giddy Up Galaxy</h2></div>
+          <SpotifySCMEmbedWidget />
+        </section>
         <ExpandablePanel id="satellite-passes" className="solara-area-satellite" title="Satellite Pass Predictor" initiallyOpen={false}>
           <SatellitePassWidget />
         </ExpandablePanel>
@@ -77,10 +82,8 @@ export default function Home() {
           <MorseCodePracticeWidget />
         </ExpandablePanel>
 
-        <section className="solara-surface solara-area-playlists" id="playlists" aria-label="Giddy Up Galaxy playlists">
-          <div className="solara-section-heading"><h2>Giddy Up Galaxy</h2></div>
-          <SpotifySCMEmbedWidget />
-        </section>
+        </div>
+
         <section className="solara-surface solara-about solara-area-about" id="about-me" aria-label="About me and QSL card">
           <Widget title="About Me" description="Software developer and Extra class amateur radio operator." image="/qsl.png" />
         </section>
