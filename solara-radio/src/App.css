@@ -267,3 +267,16 @@
 @media(max-width:1300px){.solara-header-inner{flex-wrap:wrap}.solara-header-nav{order:3;flex-basis:100%}.solara-header-actions{margin-left:auto}}
 @media(max-width:850px){.solara-menu-button{display:inline-flex;margin-left:auto}.solara-header-nav{display:none;order:4;flex-basis:100%;flex-direction:column;align-items:stretch}.solara-header-nav.is-open{display:flex}.solara-header-nav a{padding:.45rem}.solara-header-actions{margin-left:0}.solara-tools-page__grid{grid-template-columns:1fr}.solara-dashboard--command>.solara-tools-cta{flex-direction:column;align-items:flex-start}}
 @media(max-width:650px){.giddy-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.solara-projects-grid{grid-template-columns:1fr}.solara-header-brand small{display:none}.solara-header-actions .solara-atlas-link{padding:.5rem;font-size:.7rem}}
+
+/* Radio Atlas preview card: scoped additions, no dashboard grid changes. */
+.solara-dashboard--command .solara-atlas { align-items:stretch; }
+.solara-atlas__preview { display:block; position:relative; overflow:hidden; border:1px solid #24666d; border-radius:10px; text-decoration:none; margin-top:.2rem !important; background:#06111b; }
+.solara-atlas__preview img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; object-position:center; transition:transform .2s ease; }
+.solara-atlas__preview:hover img, .solara-atlas__preview:focus-visible img { transform:scale(1.025); }
+.solara-atlas__preview:focus-visible { outline:3px solid #ec935e; outline-offset:3px; }
+.solara-atlas__preview-label { position:absolute; right:.6rem; bottom:.6rem; padding:.35rem .65rem; border-radius:6px; background:rgba(11,29,41,.93); color:#f2c79d; font-size:.78rem; font-weight:600; }
+.solara-atlas__actions { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; margin-top:auto; }
+.solara-atlas__actions a { margin-top:0 !important; }
+.solara-atlas__code-link { display:inline-flex; padding:.65rem .3rem; color:#f2c79d; text-decoration:underline; text-underline-offset:3px; font-weight:600; }
+.solara-atlas__code-link:hover { color:#ec935e; }
+@media(max-width:600px){.solara-atlas__actions{align-items:stretch;flex-direction:column}.solara-atlas__code-link{padding:.5rem 0}.solara-atlas__preview-label{font-size:.7rem}}

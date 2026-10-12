@@ -58,8 +58,14 @@ export default function Home() {
           <p className="solara-eyebrow">Explore the science behind the signal</p>
           <h2 id="atlas-heading">Solara Radio Atlas</h2>
           <p>Explore propagation, ionospheric data, and signal analysis in the companion research project.</p>
-          <p className="solara-muted">A companion project to Solara Radio.</p>
-          <a className="solara-button-primary" href="https://github.com/minedamnesia" target="_blank" rel="noopener noreferrer">Explore my projects ↗</a>
+          <a className="solara-atlas__preview" href="https://radio-atlas-frontend.onrender.com/" target="_blank" rel="noopener noreferrer" aria-label="Open the live Radio Atlas interactive globe">
+            <img src="/radio-atlas-preview.webp" alt="Radio Atlas interface showing a three-dimensional Earth globe with auroral activity, observation filters, and radio-activity replay controls" loading="lazy" />
+            <span className="solara-atlas__preview-label">Explore the interactive globe ↗</span>
+          </a>
+          <div className="solara-atlas__actions">
+            <a className="solara-button-primary" href="https://radio-atlas-frontend.onrender.com/" target="_blank" rel="noopener noreferrer">Launch Radio Atlas ↗</a>
+            <a className="solara-atlas__code-link" href="https://github.com/solaranoir/radio-atlas" target="_blank" rel="noopener noreferrer">View source on GitHub ↗</a>
+          </div>
         </section>
 
         <div className="solara-area-pota">
