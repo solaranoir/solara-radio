@@ -220,3 +220,32 @@
 .solara-instrument h3 { font:600 1.15rem Georgia,serif; margin:0; color:#F2C79D; }
 .solara-instrument__feedback { background:#10363B; padding:.7rem; border-radius:8px; }
 @media(max-width:600px) { .solara-instrument__fields { grid-template-columns:1fr; } }
+
+
+/* Phase 3F: restore Phase 3D layout after Phase 3E styles */
+/* Phase 3D: keep playlists and compact radio tools in the SAME grid row.
+   This wrapper prevents CSS Grid auto-placement from reserving a blank half-row. */
+.solara-dashboard--command > .solara-entertainment-row {
+  grid-column: 1 / -1 !important;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(.65rem, 1vw, 1rem);
+  align-items: start;
+  min-width: 0;
+}
+.solara-entertainment-row > * { min-width: 0; grid-column: auto !important; }
+.solara-entertainment-row > .solara-area-playlists { grid-column: 1 !important; grid-row: 1; }
+.solara-entertainment-row > .solara-area-satellite { grid-column: 2 !important; grid-row: 1; }
+.solara-entertainment-row > .solara-area-morse { grid-column: 3 !important; grid-row: 1; }
+@media (max-width: 1200px) {
+  .solara-dashboard--command > .solara-entertainment-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .solara-entertainment-row > .solara-area-playlists { grid-column: 1 / -1 !important; grid-row: 1; }
+  .solara-entertainment-row > .solara-area-satellite { grid-column: 1 !important; grid-row: 2; }
+  .solara-entertainment-row > .solara-area-morse { grid-column: 2 !important; grid-row: 2; }
+}
+@media (max-width: 760px) {
+  .solara-dashboard--command > .solara-entertainment-row { grid-template-columns: minmax(0, 1fr); }
+  .solara-entertainment-row > .solara-area-playlists { grid-column: 1 !important; grid-row: 1; }
+  .solara-entertainment-row > .solara-area-satellite { grid-column: 1 !important; grid-row: 2; }
+  .solara-entertainment-row > .solara-area-morse { grid-column: 1 !important; grid-row: 3; }
+}
