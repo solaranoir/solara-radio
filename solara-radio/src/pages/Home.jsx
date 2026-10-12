@@ -93,7 +93,7 @@ export default function Home() {
         </section>
 
         <div className="solara-area-projects">
-          <ExpandablePanel id="projects" title="Featured Coding Projects">
+          <ExpandablePanel id="coding-projects" title="Featured Coding Projects">
             <CodingProjectsWidget />
           </ExpandablePanel>
         </div>
