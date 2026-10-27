@@ -4,5 +4,5 @@
   directory = "netlify/functions"
 
 [build]
-  environment = { NODE_VERSION = "18" }
+  environment = { NODE_VERSION = "24.22.1" }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const multer = require('multer');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { parseStringPromise } = require('xml2js');
@@ -12,7 +13,6 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
 app.use(cors());
-app.use(express.json());
 
 // ===== Spotify Setup ======
 let spotifyToken = null;
@@ -137,8 +137,17 @@ app.get('/api/spotify-playlists', async (req, res) => {
 
 // ===== Middleware: Upload Secret Protection =====
 function verifyUploadSecret(req, res, next) {
+  const expected = process.env.UPLOAD_SECRET;
+  if (!expected) {
+    // Fail closed: an unset secret must not let header-less requests through.
+    console.error('UPLOAD_SECRET is not configured; rejecting upload.');
+    return res.status(503).json({ error: 'Uploads are not configured.' });
+  }
+
   const clientSecret = req.headers['x-upload-secret'];
-  if (clientSecret !== process.env.UPLOAD_SECRET) {
+  const a = Buffer.from(typeof clientSecret === 'string' ? clientSecret : '');
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
     return res.status(403).json({ error: 'Forbidden: Invalid upload secret.' });
   }
   next();
