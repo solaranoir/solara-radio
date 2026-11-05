@@ -3,6 +3,7 @@ import TimeAndDateWidget from '../components/TimeAndDateWidget';
 import BuyMeCoffeeWidget from '../components/BuyMeCoffeeWidget';
 import PskreporterWidget from '../components/PskreporterWidget';
 import MUFMapWidget from '../components/MUFMapWidget';
+import SolaraDocsWidget from '../components/SolaraDocsWidget';
 
 export default function Sidebar() {
   return (
@@ -18,6 +19,9 @@ export default function Sidebar() {
       </div>
       <div className="solara-utility-sidebar__item">
         <PskreporterWidget />
+      </div>
+      <div className="solara-utility-sidebar__item">
+        <SolaraDocsWidget />
       </div>
       <div className="solara-utility-sidebar__item">
         <BuyMeCoffeeWidget />
